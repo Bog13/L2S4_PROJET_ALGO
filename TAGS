@@ -1,0 +1,50 @@
+
+database,10
+@12,9428
+
+LICENSE,1409
+                       Version 2,27
+ Copyright (C) 1989, 1991 Free Software Foundation,4,72
+ 51 Franklin Street,5,148
+ 51 Franklin Street, Fifth Floor,5,148
+ 51 Franklin Street, Fifth Floor, Boston,5,148
+ of this license document,7,270
+  To protect your rights,28,1347
+running the Program is not restricted,74,3759
+notices that refer to this License and to the absence of any warranty;83,4278
+your rights to work written entirely by you; rather,125,6589
+In addition,129,6763
+with the Program 130,6834
+    1 and 2 above on a medium customarily used for software interchange; or,140,7352
+    b) Accompany it with a written offer,142,7430
+    customarily used for software interchange; or,147,7766
+integrity of the free software distribution system,218,11705
+system;222,11961
+    Copyright 294,15793
+    This program is free software;296,15831
+    the Free Software Foundation;298,15977
+    the Free Software Foundation; either version 2 of the License,298,15977
+    the Free Software Foundation; either version 2 of the License, or298,15977
+parts of the General Public License.  Of course,321,17081
+be called something other than `show w'w322,17155
+You should also get your employer 325,17286
+  Yoyodyne,329,17475
+Gnomovision331,17623
+  Ty Coon,333,17663
+proprietary programs.  If your program is a subroutine library,336,17769
+library.  If this is what you want to do,338,17917
+
+Makefile,119
+CC=1,0
+CFLAGS=2,8
+EXEC=3,48
+SRC=4,62
+OBJ=5,106
+$(EXEC)$(EXEC7,125
+clean:clean11,169
+mrproper:mrproper14,193
+
+name.txt,26
+DEFUN HISOBU15034,226117
+
+README.md,0

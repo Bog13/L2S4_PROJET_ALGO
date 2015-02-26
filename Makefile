@@ -9,7 +9,7 @@ $(EXEC): $(OBJ)
 
 
 clean:
-	rm -rf *.o
+	rm -rf src/*.o
 
 mrproper: clean
 	rm -rf $(EXEC)
