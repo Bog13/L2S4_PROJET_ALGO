@@ -112,8 +112,10 @@ void directory_random(struct directory *self, size_t n)
       struct directory_data *dir_d = malloc(sizeof(struct directory_data));
       directory_data_random(dir_d);
 
-      directory_add(self,dir_d);
+      directory_raw_add(self,dir_d);
     }
+
+  directory_sort(self);
 }
 
 /* print function */
@@ -168,10 +170,20 @@ void directory_grow(struct directory *self)
 
 }
 
-
+/* add */
 void directory_add(struct directory *self, struct directory_data *data)
 {
   assert(self);
+  assert(data);
+  
+  directory_raw_add(self,data);
+  directory_insert_sort(self);
+}
+
+void directory_raw_add(struct directory *self, struct directory_data *data)
+{
+  assert(self);
+  assert(data);
   
   if( directory_is_full(self) )
     {
@@ -181,3 +193,191 @@ void directory_add(struct directory *self, struct directory_data *data)
   self->data[self->size] = data;
   self->size++;
 }
+
+
+/* search */
+
+void directory_search(const struct directory *self, const char *last_name)
+{
+
+  for(size_t i=0 ; i < self->size; i++)
+    {
+      if( strcmp( self->data[i]->last_name, last_name ) == 0 )
+	{
+	  directory_data_print(self->data[i]);
+	}
+    }
+}
+
+void directory_search_opt(const struct directory *self, const char *last_name)
+{
+  assert(self);
+  assert(self->size >= 0);
+  
+  if( self->size != 0 )
+    {
+      directory_search_opt_partial(self, last_name,0,self->size-1);
+    }
+}
+
+void directory_search_opt_partial(const struct directory *self, const char *last_name, size_t begin, size_t end)
+{
+  assert(self);
+  assert(begin >= 0 && end < self->size);
+
+  if(begin > end ){ return; }
+  
+  int found = 0;
+  size_t medium = (begin + end + 1 )/2;
+
+  if( strcmp(self->data[medium]->last_name, last_name) > 0)
+    {
+      if( medium - 1 > begin )
+	{
+	  directory_search_opt_partial(self,last_name, begin, medium-1);
+	}
+    }
+  else if( strcmp(self->data[medium]->last_name, last_name) < 0)
+    {
+      directory_search_opt_partial(self,last_name, medium+1, end);    
+    }
+  else
+    {
+      found = 1;
+      size_t i = medium;
+
+      
+      while( i < self->size && strcmp(self->data[i]->last_name, last_name) == 0  )
+	{
+	  directory_data_print(self->data[i]);
+	  i++;
+	}
+
+
+      i = medium-1;
+      
+      while( i + 1 > 0 && strcmp(self->data[i]->last_name, last_name) == 0)
+	{
+	  directory_data_print(self->data[i]);
+	  i--;
+	}
+
+    }
+  
+  if( !found && begin == end - 1)//only on the last iteration
+    {
+      printf("Can't find %s in the database !\n", last_name);
+    }
+}
+
+
+/* sort */
+///TODO tri opti combinaison
+void directory_sort(struct directory *self)
+{
+  //directory_insert_sort(self);
+  directory_quick_sort(self);
+}
+
+
+void directory_quick_sort(struct directory *self)
+{
+  assert(self);
+  assert(self->size >= 0);
+
+  if( self->size != 0 )
+    {
+      directory_quick_sort_partial(self,0,self->size-1);
+    }
+}
+
+
+void directory_quick_sort_partial(struct directory *self, size_t begin, size_t end)
+{	
+  if(begin < end)
+    {
+      size_t pivot = directory_quick_sort_partition(self,begin,end);
+      
+      if( pivot > begin ) 
+	{
+	  directory_quick_sort_partial(self, begin, pivot-1);
+	}
+
+      if( pivot < end )
+	{
+	  directory_quick_sort_partial(self, pivot+1, end);
+	}
+	
+    }
+}
+
+void directory_swap(struct directory *self, size_t a, size_t b)
+{
+  struct directory_data *tmp = self->data[a];
+  self->data[a] = self->data[b];
+  self->data[b] = tmp;
+}
+
+size_t directory_quick_sort_partition(struct directory *self, size_t begin, size_t end)
+{
+  
+  size_t pivot_index = begin;
+  const char* pivot = self->data[pivot_index]->last_name;
+  directory_swap(self,pivot_index,end);
+  size_t up = begin;
+
+  for(size_t i = begin; i < end; i++)
+    {
+      if( strcmp(self->data[i]->last_name, pivot) < 0 )
+	{
+	  directory_swap(self,i,up);
+	  up++;
+	} 
+    }
+
+  directory_swap(self,up,end);
+
+  return up;
+}
+ 
+ 
+void directory_insert_sort(struct directory *self)
+{
+  assert(self);
+
+  if(self->size != 0 )
+    {
+      directory_insert_sort_partial(self,0,self->size - 1);
+    }
+}
+
+void directory_insert_sort_partial(struct directory *self,size_t begin, size_t end)
+{
+  assert(self);
+  assert(end+1 >= begin);
+  assert( begin >= 0 );
+  assert( end <= self->size );
+  
+  if( begin == end )
+    {
+      return;
+    }
+
+  
+  for( size_t i = begin+1; i <= end; i++)
+    {
+      struct directory_data* tmp = self->data[i];
+      size_t j = i;
+
+      while(j > 0 && strcmp( self->data[j-1]->last_name, tmp->last_name ) > 0 )
+	{
+	  self->data[j]= self->data[j-1];
+	  --j;
+	}
+
+      self->data[j] = tmp;
+    }
+  
+}
+
+
