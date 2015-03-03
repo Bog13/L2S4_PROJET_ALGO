@@ -47,6 +47,7 @@ void index_rehash(struct index *self);
 void index_bucket_rehash(struct index_bucket* self,struct index* dest);
 
 /* import */
+//import all the directory_data in the directory into the index
 void index_fill_with_directory(struct index *self, const struct directory *dir);
 
 #endif
