@@ -1,6 +1,7 @@
 #include "directory.h"
 #include <assert.h>
 
+
 void directory_create(struct directory *self)
 {
   self->data = NULL;
