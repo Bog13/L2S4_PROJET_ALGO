@@ -1,3 +1,19 @@
+/**
+ * Algorithmique et structures de données 
+ * 
+ * PROJET DATABASE
+ *
+ * Licence 2 Informatique 2014-2015
+ *
+ * @author DUMONTET Sylvain 
+ * @author OSSETE GOMBE Bérenger alias bog
+ *
+ * DIRECTORY
+ * directory management 
+ *
+ **/
+
+
 #ifndef DIRECTORY_H
 #define DIRECTORY_H
 

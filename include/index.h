@@ -1,3 +1,18 @@
+/**
+ * Algorithmique et structures de données 
+ * 
+ * PROJET DATABASE
+ *
+ * Licence 2 Informatique 2014-2015
+ *
+ * @author DUMONTET Sylvain 
+ * @author OSSETE GOMBE Bérenger alias bog
+ *
+ * INDEX
+ * index management 
+ *
+ **/
+
 #ifndef INDEX_H
 #define INDEX_H
 #include <stdio.h>

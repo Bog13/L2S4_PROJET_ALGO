@@ -1,3 +1,18 @@
+/**
+ * Algorithmique et structures de données 
+ * 
+ * PROJET DATABASE
+ *
+ * Licence 2 Informatique 2014-2015
+ *
+ * @author DUMONTET Sylvain 
+ * @author OSSETE GOMBE Bérenger alias bog
+ *
+ * APPLI
+ * user interface
+ *
+ **/
+
 #include "appli.h"
 
 //replace the last \n with \0
@@ -21,6 +36,8 @@ void clean_newline(char *buf, size_t size)
 //print the menu
 void menu_display()
 {
+
+  printf("\n############ MENU ############ \n");
   printf("What do you want to do ?\n");
   printf("\t1: Search by last name (not optimised)\n");
   printf("\t2: Search by last name (optimised)\n");
@@ -28,6 +45,14 @@ void menu_display()
   printf("\t4: Search by telephone\n");
   printf("\tq: Quit\n");
   printf("Your choice: ");
+}
+
+//print the title
+void print_title(size_t db_size)
+{
+  printf("\n########## DATABASE ########## \n");
+  printf("Welcome to THE epic database !\n\n");
+  printf("Please wait until your database of %zd elements is ready.\n", db_size);
 }
 
 //return the menu entry associated to entry 
@@ -85,8 +110,7 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
   char * entry;
   int running = 1;
   suseconds_t timer;
-  
-  printf("########## DATABASE ########## \n");
+
   while( running )
     {
       char* search_entry;
@@ -111,7 +135,7 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
       switch( convert )
 	{
 	case 0:
-	  printf("Goodbye !\n");
+	  printf("See you soon !\n");
 	  break;
 	  
 	case 1:
