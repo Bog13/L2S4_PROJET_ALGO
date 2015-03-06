@@ -181,6 +181,11 @@ size_t index_first_name_hash(const struct directory_data *data)
   return fnv_hash(data->first_name);
 }
 
+size_t index_telephone_hash(const struct directory_data *data)
+{
+  return fnv_hash(data->telephone);
+}
+
 void index_bucket_rehash(struct index_bucket* self,struct index* dest)
 {
   if( self != NULL )
@@ -259,5 +264,59 @@ void index_fill_with_directory(struct index *self, const struct directory *dir)
   for(size_t i = 0; i < dir->size; i++)
     {
       index_add(self, dir->data[i]);
+    }
+}
+
+/* search */
+void index_search_by_first_name(const struct index *self, const char *first_name)
+{
+  assert(self);
+  assert(self->size > 0);
+
+  size_t i = fnv_hash(first_name)%self->size;
+  struct index_bucket* it = self->buckets[i];
+  int found = 0;
+
+  while( it != NULL )
+    {
+      if( strcmp(it->data->first_name, first_name) == 0 )
+	{
+	  directory_data_print(it->data);
+	  found++;
+	}
+      
+      it = it->next;
+    }
+
+  if( !found )
+    {
+      printf("Can't find %s in the database !\n", first_name);
+    }
+}
+
+
+void index_search_by_telephone(const struct index *self, const char *telephone)
+{
+  assert(self);
+  assert(self->size > 0);
+  
+  size_t i = fnv_hash(telephone)%self->size;
+  struct index_bucket* it = self->buckets[i];
+  int found = 0;
+
+  while( it != NULL )
+    {
+      if( strcmp(it->data->telephone, telephone) == 0 )
+	{
+	  directory_data_print(it->data);
+	  found++;
+	}
+      
+      it = it->next;
+    }
+
+  if( !found )
+    {
+      printf("Can't find %s in the database !\n", telephone);
     }
 }

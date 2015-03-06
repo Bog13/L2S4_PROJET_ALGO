@@ -9,6 +9,8 @@
 #define NAME_LENGTH_MAX 10
 #define TELEPHONE_LENGTH 8
 
+#define MIN_QUICK_SORT 15
+
 struct directory
 {
   struct directory_data **data;
@@ -26,11 +28,16 @@ struct directory_data
 
 /*init*/
 void directory_create(struct directory *self);
-void directory_grow(struct directory *self);
-  
+
 /* destroy */
 void directory_data_destroy(struct directory *self);
 void directory_destroy(struct directory *self);
+
+/* random */
+char* random_name();
+int random_int(int min,int max);
+void directory_random(struct directory *self, size_t n);
+void directory_data_random(struct directory_data *self);
 
 /* tests */
 int directory_is_full(struct directory *self);
@@ -39,17 +46,9 @@ int directory_is_full(struct directory *self);
 void directory_data_print(const struct directory_data *data);
 void directory_print(const struct directory *self);
 
-/* random name */
-char* random_name();
-int random_int(int min,int max);
-
-void directory_random(struct directory *self, size_t n);
-void directory_data_random(struct directory_data *self);
-
 /* add */
-//add data into self and sort self
+void directory_grow(struct directory *self);
 void directory_add(struct directory *self, struct directory_data *data);
-//add data into self without sorting
 void directory_raw_add(struct directory *self, struct directory_data *data);
 
 /* search */

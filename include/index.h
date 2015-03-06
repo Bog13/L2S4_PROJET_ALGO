@@ -42,6 +42,7 @@ void index_print(const struct index *self);
 /* hash */
 size_t fnv_hash(const char *key);
 size_t index_first_name_hash(const struct directory_data *data);
+size_t index_telephone_hash(const struct directory_data *data);
 
 void index_rehash(struct index *self);
 void index_bucket_rehash(struct index_bucket* self,struct index* dest);
@@ -50,4 +51,8 @@ void index_bucket_rehash(struct index_bucket* self,struct index* dest);
 //import all the directory_data in the directory into the index
 void index_fill_with_directory(struct index *self, const struct directory *dir);
 
+
+/* search */
+void index_search_by_first_name(const struct index *self, const char *first_name);
+void index_search_by_telephone(const struct index *self, const char *telephone);
 #endif
