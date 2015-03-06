@@ -253,31 +253,35 @@ void directory_search_opt_partial(const struct directory *self, const char *last
 {
   assert(self);
   assert(last_name);
-  assert(begin >= 0 && end < self->size);
+  assert(begin >= 0);
+  assert(end < self->size);
   assert(begin <= end);
 
-  //sorted yet
-  if(begin == end ){ return; }
-  
   int found = 0;
-  size_t medium = (begin + end + 1 )/2;
+  size_t medium = (begin + end)/2;
 
-  //last_name belongs to the first half of self->data
-  if( strcmp(self->data[medium]->last_name, last_name) > 0)
+  //one remaining
+  if(begin == end)
     {
-      if( medium - 1 > begin )
+      if( strcmp(self->data[begin]->last_name, last_name) == 0 )
 	{
-	  directory_search_opt_partial(self,last_name, begin, medium-1);
+	  directory_data_print(self->data[begin]);
+	  found = 1;
 	}
     }
+  //last_name belongs to the first half of self->data
+  else if( strcmp(self->data[medium]->last_name, last_name) > 0 )
+    {
+      directory_search_opt_partial(self,last_name, begin, medium);
+    }
   //last_name belongs to the second half of self->data
-  else if( strcmp(self->data[medium]->last_name, last_name) < 0)
+  else if( strcmp(self->data[medium]->last_name, last_name) < 0 )
     {
       directory_search_opt_partial(self,last_name, medium+1, end);    
     }
   //last_name found 
   else
-    {
+    { 
       found = 1;
       size_t i = medium;
 
@@ -296,8 +300,8 @@ void directory_search_opt_partial(const struct directory *self, const char *last
 	  i--;
 	}
     }
-  
-  if( !found && begin == end - 1)//only on the last iteration
+  //  printf("found: %d\n",found);
+  if( !found && begin == end)//only on the last iteration
     {
       printf("Can't find %s in the database !\n", last_name);
     }
