@@ -254,7 +254,7 @@ void directory_search_opt_partial(const struct directory *self, const char *last
   assert(self);
   assert(last_name);
   assert(begin >= 0 && end < self->size);
-  assert(begin < end);
+  assert(begin <= end);
 
   //sorted yet
   if(begin == end ){ return; }
