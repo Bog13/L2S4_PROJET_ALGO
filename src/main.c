@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
   srand(time(NULL));
   /* */
   suseconds_t timer = get_microseconds();
-
+  
   //directory
   struct directory *dir = malloc(sizeof(struct directory));
   directory_create(dir);
@@ -32,10 +32,12 @@ int main(int argc, char *argv[])
   index_fill_with_directory(index_telephone, dir);
 
   
-  // print
-  //directory_print(dir);
-  //printf("----------\n\n");
 
+  #ifdef DEBUG_MSG
+  directory_print(dir);
+  printf("----------\n\n");
+  #endif
+  
   timer = get_microseconds() - timer;
 
   printf("initialization time %fs\n\n",(float)(timer/1000000.0));

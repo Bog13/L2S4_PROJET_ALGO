@@ -1,7 +1,8 @@
 #include <index.h>
 
-/* init destroy */
+/* INIT */
 
+//initialize an index_bucket
 void index_bucket_create(struct index_bucket *self)
 {
   assert(self);
@@ -9,16 +10,7 @@ void index_bucket_create(struct index_bucket *self)
   self->next = NULL;
 }
 
-void index_bucket_destroy(struct index_bucket *self)
-{
-  if( self != NULL )
-    {
-      index_bucket_destroy( self->next );
-      free(self);
-    }
-}
-
-
+//initialize an index
 void index_create(struct index *self, index_hash_func_t func)
 {
   assert(self);
@@ -29,6 +21,20 @@ void index_create(struct index *self, index_hash_func_t func)
   self->buckets = NULL;
 }
 
+
+/* DESTROY */
+
+//free a whole list of index_bucket from self
+void index_bucket_destroy(struct index_bucket *self)
+{
+  if( self != NULL )
+    {
+      index_bucket_destroy( self->next );
+      free(self);
+    }
+}
+
+//free all index_bucket of self
 void index_destroy(struct index *self)
 {
   assert(self);
@@ -44,12 +50,14 @@ void index_destroy(struct index *self)
 }
 
 
-/* add */
+/* ADD */
+
+//add a directory_data between self and self->next in an index_bucket
 struct index_bucket *index_bucket_add(struct index_bucket *self, const struct directory_data *data)
 {
   assert(data);
 
-  if( self == NULL )
+  if( self == NULL )//create the index_bucket
     {
       struct index_bucket *new_bucket = malloc(sizeof(struct index_bucket));
       index_bucket_create(new_bucket);
@@ -57,26 +65,25 @@ struct index_bucket *index_bucket_add(struct index_bucket *self, const struct di
 
       return new_bucket;
     }
-  else if( self->data == NULL )
+  else if( self->data == NULL )//add in place
     {
       self->data = data;
       self->next = NULL;
 
       return self;
     }
-  else
+  else//add in the linked list
     {
         struct index_bucket *new_bucket = malloc(sizeof(struct index_bucket));
 	index_bucket_create(new_bucket);
 	new_bucket->data = data;
   
-      if( self->next == NULL )
+	if( self->next == NULL )//add at the end of the list
 	{
 	  new_bucket->next = NULL;
 	  self->next = new_bucket;
-
 	}
-      else
+	else//add after self
 	{
 	  new_bucket->next = self->next;
 	  self->next = new_bucket;
@@ -84,16 +91,16 @@ struct index_bucket *index_bucket_add(struct index_bucket *self, const struct di
 
       return new_bucket;
     }
-
-
 }
 
+//add a directory_data in an index using index's hash function
 void index_add(struct index *self, const struct directory_data *data)
 {
   assert(self);
   assert(data);
-
-  if(self->buckets == NULL || ((float)self->count/(float)self->size) >= 0.5)
+  float collision_ratio = (((float)self->count/(float)self->size));
+  
+  if(self->buckets == NULL || collision_ratio >= 0.5 )
     {
       index_rehash(self);
     }
@@ -113,12 +120,15 @@ void index_add(struct index *self, const struct directory_data *data)
   index_bucket_add( self->buckets[i], data );
   
   self->count++;
-
 }
 
-/* print */
+/* PRINT */
+
+//print the content of an index_bucket
 void index_bucket_print(const struct index_bucket *self)
 {
+  assert(self);
+  
   if(self != NULL)
     {
       if(self->data)
@@ -128,10 +138,9 @@ void index_bucket_print(const struct index_bucket *self)
       
       index_bucket_print(self->next);
     }
-  
 }
 
-
+//print the content of an index_bucket
 void index_print(const struct index *self)
 {
   assert(self);
@@ -150,15 +159,13 @@ void index_print(const struct index *self)
     }
 }
 
-/* hash */
+/* HASH */
 
-///TODO 32bit
-size_t fnv_hash(const char *key)
+//return the hashcode of key for 32bits systems
+size_t fnv_hash_32bits(const char *key)
 {
-
-  //const size_t FNV_OFFSET_BASIS = 16777619;//0xcbf29ce484222325;      32 bits
-  //const size_t FNV_PRIME = 2166136261;//0x100000001b3;
-
+  assert(key);
+  
   const size_t FNV_OFFSET_BASIS = 0xcbf29ce484222325;
   const size_t FNV_PRIME = 0x100000001b3;
   
@@ -173,21 +180,63 @@ size_t fnv_hash(const char *key)
     }
 
   return hash;
-  
 }
 
+//return the hashcode of key for 64bits systems
+size_t fnv_hash_64bits(const char *key)
+{
+  assert(key);
+  
+  const size_t FNV_OFFSET_BASIS = 16777619;
+  const size_t FNV_PRIME = 2166136261;
+  
+  const size_t BYTES = strlen(key);
+  
+  size_t hash = FNV_OFFSET_BASIS; 
+  
+  for(size_t i=0; i < BYTES; i++)
+    {
+      hash |= key[i];
+      hash = hash * FNV_PRIME;
+    }
+
+  return hash;
+}
+
+//return the hashcode of key
+size_t fnv_hash(const char *key)
+{
+  assert(key);
+  
+  if ((size_t)-1 > 0xffffffffUL)//> 32bits
+    {
+      return fnv_hash_64bits(key);
+    }
+  else//<= 32bits
+    {
+      return fnv_hash_32bits(key);
+    }
+}
+
+//return the hashcode of data->first_name
 size_t index_first_name_hash(const struct directory_data *data)
 {
+  assert(data);
   return fnv_hash(data->first_name);
 }
 
+//return the hashcode of data->telephone
 size_t index_telephone_hash(const struct directory_data *data)
 {
+  assert(data);
   return fnv_hash(data->telephone);
 }
 
+//hash a whole index_bucket list into an index
 void index_bucket_rehash(struct index_bucket* self,struct index* dest)
 {
+  assert(dest);
+  
   if( self != NULL )
     {
       index_bucket_rehash(self->next, dest);
@@ -197,6 +246,7 @@ void index_bucket_rehash(struct index_bucket* self,struct index* dest)
     }
 }
 
+//grow the size of an index and rehash all the index_bucket in it
 void index_rehash(struct index *self)
 {
   #ifdef DEBUG_MSG
@@ -205,7 +255,7 @@ void index_rehash(struct index *self)
   
   size_t size = self->size;
 	
-  if( self->buckets == NULL )
+  if( self->buckets == NULL )//create a new self->buckets
     {
       size = 10;
       self->buckets = calloc(size, sizeof(struct index_bucket *));
@@ -215,15 +265,15 @@ void index_rehash(struct index *self)
 	  self->buckets[i] = NULL;
 	}
     }
-  else
+  else//double the size of self->buckets
     {
       size *= 2;
 
-     /* create tmp */
+     //create tmp
      struct index *tmp = calloc(size, sizeof(struct index));
      index_create(tmp, self->func);
      
-     /* create tmp->buckets*/
+     //create tmp->buckets
      tmp->buckets = calloc(size, sizeof(struct index_bucket *));
      tmp->size = size;
      
@@ -232,15 +282,13 @@ void index_rehash(struct index *self)
      	  tmp->buckets[i] = NULL;
 	}
      
-     
-     /* add */
+     //rehash self->buckets into tmp 
      for(size_t i = 0; i<self->size; i++)
        {
 	 if( self->buckets[i] != NULL  )
 	   {
 	     index_bucket_rehash(self->buckets[i],tmp);
 	   }
-     
        }
 
      free(self->buckets);
@@ -251,11 +299,11 @@ void index_rehash(struct index *self)
     }
 
   self->size = size;
-
-
 }
 
-/* import */
+/* IMPORT */
+
+//fill the content of an index with a directory
 void index_fill_with_directory(struct index *self, const struct directory *dir)
 {
   assert(self);
@@ -267,17 +315,19 @@ void index_fill_with_directory(struct index *self, const struct directory *dir)
     }
 }
 
-/* search */
+/* SEARCH */
+
+//print all the directory_data matching with first_name in an index
 void index_search_by_first_name(const struct index *self, const char *first_name)
 {
   assert(self);
   assert(self->size > 0);
 
-  size_t i = fnv_hash(first_name)%self->size;
+  size_t i = fnv_hash(first_name)%self->size;//index of the first_name in the index->buckets
   struct index_bucket* it = self->buckets[i];
   int found = 0;
 
-  while( it != NULL )
+  while( it != NULL )//read the linked list
     {
       if( strcmp(it->data->first_name, first_name) == 0 )
 	{
@@ -294,7 +344,7 @@ void index_search_by_first_name(const struct index *self, const char *first_name
     }
 }
 
-
+//print all the directory_data matching with telephone in an index
 void index_search_by_telephone(const struct index *self, const char *telephone)
 {
   assert(self);

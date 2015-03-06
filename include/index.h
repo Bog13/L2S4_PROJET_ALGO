@@ -24,12 +24,13 @@ struct index
 };
 
 
-/* init destroy */
+/* init */
 void index_bucket_create(struct index_bucket *self);
-void index_bucket_destroy(struct index_bucket *self);
-
 void index_create(struct index *self, index_hash_func_t func);
+
+/* destroy */
 void index_destroy(struct index *self);
+void index_bucket_destroy(struct index_bucket *self);
 
 /* add */
 struct index_bucket *index_bucket_add(struct index_bucket *self, const struct directory_data *data);
@@ -41,6 +42,9 @@ void index_print(const struct index *self);
 
 /* hash */
 size_t fnv_hash(const char *key);
+size_t fnv_hash_32bits(const char *key);
+size_t fnv_hash_64bits(const char *key);
+
 size_t index_first_name_hash(const struct directory_data *data);
 size_t index_telephone_hash(const struct directory_data *data);
 
@@ -48,11 +52,10 @@ void index_rehash(struct index *self);
 void index_bucket_rehash(struct index_bucket* self,struct index* dest);
 
 /* import */
-//import all the directory_data in the directory into the index
 void index_fill_with_directory(struct index *self, const struct directory *dir);
-
 
 /* search */
 void index_search_by_first_name(const struct index *self, const char *first_name);
 void index_search_by_telephone(const struct index *self, const char *telephone);
+
 #endif
