@@ -7,15 +7,15 @@
 #include "directory.h"
 #include "index.h"
 #include "appli.h"
+#define DEBUG
 #define DEBUG_MSG
-
 int main(int argc, char *argv[])
 {
   #ifdef DEBUG_MSG
   printf("\n\t! DEBUG MODE ACTIVATED !\n\n");
   #endif
   /* init */
-  #ifndef DEBUG_MSG
+  #ifndef DEBUG
   srand(time(NULL));
   #endif
   /* */
@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
 
   #ifdef DEBUG_MSG
   directory_print(dir);
+  printf("----------\n\n");
+  index_print(index_first_name);
+  printf("----------\n\n");
+  index_print(index_telephone);
   printf("----------\n\n");
   #endif
   

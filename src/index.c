@@ -127,8 +127,6 @@ void index_add(struct index *self, const struct directory_data *data)
 //print the content of an index_bucket
 void index_bucket_print(const struct index_bucket *self)
 {
-  assert(self);
-  
   if(self != NULL)
     {
       if(self->data)
@@ -144,7 +142,7 @@ void index_bucket_print(const struct index_bucket *self)
 void index_print(const struct index *self)
 {
   assert(self);
-
+  
   for(size_t i = 0; i<self->size; i++)
     {
       printf("%zd: ",i);
@@ -153,8 +151,11 @@ void index_print(const struct index *self)
 	{
 	  printf("x \n");
 	}
-
-      index_bucket_print(self->buckets[i]);
+      else
+	{
+	  index_bucket_print(self->buckets[i]);
+	}
+	
       
     }
 }
