@@ -25,7 +25,9 @@
 #define NAME_LENGTH_MAX 10
 #define TELEPHONE_LENGTH 8
 
-#define MIN_QUICK_SORT 15
+//quicksort is less efficient than insertsort below 13 data
+//13 found by comparing perfomances mesures on both algorithms
+#define MIN_QUICK_SORT 13
 
 struct directory
 {

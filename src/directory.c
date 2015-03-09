@@ -328,7 +328,9 @@ void directory_search_opt_partial(const struct directory *self, const char *last
 //sort a directory with the apropriate sort algorithm
 void directory_sort(struct directory *self)
 {
+  
   assert(self);
+  
   if (self->size > MIN_QUICK_SORT)
     {
       directory_quick_sort(self);

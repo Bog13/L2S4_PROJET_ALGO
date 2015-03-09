@@ -25,6 +25,7 @@
 //#define DEBUG_MSG
 #define DATABASE_SIZE 1000000
 
+
 int main(int argc, char *argv[])
 {
   print_title(DATABASE_SIZE);
