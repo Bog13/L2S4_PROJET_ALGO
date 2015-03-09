@@ -163,7 +163,7 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
 	  break;
 	  
 	default:
-	  printf("erreur saisie\n");
+	  printf("wrong entry\n");
 	  break;
 	}
       
