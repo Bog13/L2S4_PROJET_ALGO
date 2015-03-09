@@ -39,8 +39,8 @@ void menu_display()
 
   printf("\n############ MENU ############ \n");
   printf("What do you want to do ?\n");
-  printf("\t1: Search by last name (not optimised)\n");
-  printf("\t2: Search by last name (optimised)\n");
+  printf("\t1: Search by last name (not optimized)\n");
+  printf("\t2: Search by last name (optimized)\n");
   printf("\t3: Search by first name\n");
   printf("\t4: Search by telephone\n");
   printf("\t5: Add a new data\n");
