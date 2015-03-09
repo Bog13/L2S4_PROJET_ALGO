@@ -44,8 +44,22 @@ void menu_display()
   printf("\t3: Search by first name\n");
   printf("\t4: Search by telephone\n");
   printf("\t5: Add a new data\n");
+  printf("\t6: Print the database (At your own risks !)\n");
+  printf("\t7: Credits\n");
   printf("\tq: Quit\n");
   printf("Your choice: ");
+}
+
+//allow user to add a valid input in the database
+void credit_display()
+{
+  printf("\n######################################################################\n");
+  printf("\nDATABASE - Projet Algorithmique et structures de données, mars 2015\n\n");
+  printf("\tDUMONTET Sylvain sylvain.dumontet@edu.univ-fcomte.fr\n");
+  printf("\tOSSETE GOMBE Berenger berenger.ossete_gombe@edu.univ-fcomte.fr\n\n");
+  printf("######################################################################\n");
+  printf("\n");
+    
 }
 
 //print the title
@@ -67,7 +81,7 @@ int convert_entry(const char* entry)
     }
 
   int int_entry = atoi(entry);
-  if( int_entry >= 1 && int_entry <= 5 )
+  if( int_entry >= 1 && int_entry <= 7 )
     {
       return int_entry;
     }
@@ -105,11 +119,10 @@ void toupper_string(char* str)
     }
 }
 
+//allow user to add a valid input in the database
 void user_add(struct directory* dir, struct index *ifn, struct index *itel)
 {
   struct directory_data *data = malloc(sizeof(struct directory_data));
-  //  directory_data_create(data);
-
   
   printf("Entry first name (length: %d min, %d max): ",NAME_LENGTH_MIN,NAME_LENGTH_MAX);
   char * fn = get_entry();
@@ -207,6 +220,17 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
 
 	case 5:
 	  user_add(dir,index_first_name, index_telephone);
+	  break;
+
+	case 6:
+	  timer =  get_microseconds();
+	  directory_print(dir);
+	  timer =  get_microseconds() - timer;
+	  printf("\n\tdisplaying time: %.3fs\n---\n\n",(float)(timer/1000000.0));
+	  break;
+
+	case 7:
+	  credit_display();
 	  break;
 	  
 	default:

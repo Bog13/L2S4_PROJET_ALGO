@@ -54,7 +54,7 @@ void directory_destroy(struct directory *self)
 
 /* RANDOM */
 
-//return if the name is correct
+//return 1 if the name is correct
 int name_is_correct(char* name)
 {
   size_t length = strlen(name);
@@ -70,7 +70,7 @@ int name_is_correct(char* name)
   return (length >= NAME_LENGTH_MIN && length <= NAME_LENGTH_MAX);
 }
 
-//return if the phone number is correct
+//return 1 if the phone number is correct
 int telephone_is_correct(char *tel)
 {
   size_t length = strlen(tel);
