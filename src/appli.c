@@ -163,7 +163,7 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
 	  break;
 	  
 	default:
-	  printf("wrong entry\n");
+	  printf("Typing error\n");
 	  break;
 	}
       
