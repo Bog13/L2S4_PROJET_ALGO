@@ -33,8 +33,7 @@ suseconds_t get_microseconds();
 void print_title(size_t db_size);
 void menu_display();
 void appli_main_loop(struct directory *dir, struct index* index_first_name, struct index* index_telephone);
-
-
+void user_add(struct directory* dir, struct index *ifn, struct index *itel);
 void toupper_string(char* str);
 
 #endif

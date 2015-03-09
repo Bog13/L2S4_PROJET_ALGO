@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define NAME_LENGTH_MIN 3
 #define NAME_LENGTH_MAX 10
@@ -52,6 +53,8 @@ void directory_data_destroy(struct directory *self);
 void directory_destroy(struct directory *self);
 
 /* random */
+int name_is_correct(char* name);
+int telephone_is_correct(char *tel);
 char* random_name();
 int random_int(int min,int max);
 void directory_random(struct directory *self, size_t n);

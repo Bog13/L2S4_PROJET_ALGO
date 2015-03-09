@@ -43,6 +43,7 @@ void menu_display()
   printf("\t2: Search by last name (optimised)\n");
   printf("\t3: Search by first name\n");
   printf("\t4: Search by telephone\n");
+  printf("\t5: Add a new data\n");
   printf("\tq: Quit\n");
   printf("Your choice: ");
 }
@@ -66,7 +67,7 @@ int convert_entry(const char* entry)
     }
 
   int int_entry = atoi(entry);
-  if( int_entry >= 1 && int_entry <= 4 )
+  if( int_entry >= 1 && int_entry <= 5 )
     {
       return int_entry;
     }
@@ -102,6 +103,48 @@ void toupper_string(char* str)
     {
       str[i] = toupper(str[i]);
     }
+}
+
+void user_add(struct directory* dir, struct index *ifn, struct index *itel)
+{
+  struct directory_data *data = malloc(sizeof(struct directory_data));
+  //  directory_data_create(data);
+
+  
+  printf("Entry first name: ");
+  char * fn = get_entry();
+  printf("\n");
+  
+  printf("Entry last name: ");
+  char * ln = get_entry();
+  printf("\n");
+  
+  printf("Entry telephone: ");
+  char * tel = get_entry();
+  printf("\n");
+
+  if(name_is_correct(fn) && name_is_correct(ln) && telephone_is_correct(tel))
+    {
+      toupper_string(fn);
+      toupper_string(ln);
+      
+      strcpy(data->first_name, fn);
+      strcpy(data->last_name , ln);
+      strcpy(data->telephone, tel);
+
+      directory_add(dir, data);
+      index_add(ifn, data);
+      index_add(itel, data);
+    }
+  else
+    {
+      printf("Invalid name (length: %d min, %d max) or phone number (length: %d)\n",NAME_LENGTH_MIN,NAME_LENGTH_MAX,TELEPHONE_LENGTH);
+    }
+  
+  free(fn);
+  free(ln);
+  free(tel);
+
 }
 
 //execute the application and manage user inputs
@@ -160,6 +203,10 @@ void appli_main_loop(struct directory *dir, struct index* index_first_name, stru
 	  timer =  get_microseconds();
 	  index_search_by_telephone(index_telephone,search_entry);
 	  timer =  get_microseconds() - timer;
+	  break;
+
+	case 5:
+	  user_add(dir,index_first_name, index_telephone);
 	  break;
 	  
 	default:

@@ -54,6 +54,38 @@ void directory_destroy(struct directory *self)
 
 /* RANDOM */
 
+//return if the name is correct
+int name_is_correct(char* name)
+{
+  size_t length = strlen(name);
+  
+  for(size_t i = 0; i< length; i++)
+    {
+      if( !(isalpha(name[i]) || name[i] == ' ' || name[i] == '-') )
+	{
+	  return 0;
+	}
+    }
+
+  return (length >= NAME_LENGTH_MIN && length <= NAME_LENGTH_MAX);
+}
+
+//return if the phone number is correct
+int telephone_is_correct(char *tel)
+{
+  size_t length = strlen(tel);
+  
+  for(size_t i = 0; i< length; i++)
+    {
+      if( !(tel[i] >= '0' && tel[i] <= '9') )
+	{
+	  return 0;
+	}
+    }
+  
+  return (length == TELEPHONE_LENGTH);
+}
+
 //random number between min and max-1 
 int random_int(int min,int max)
 {
