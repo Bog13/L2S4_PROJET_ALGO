@@ -23,7 +23,7 @@
 #include "appli.h"
 //#define DEBUG
 //#define DEBUG_MSG
-#define DATABASE_SIZE 100
+#define DATABASE_SIZE 1000000
 
 
 int main(int argc, char *argv[])

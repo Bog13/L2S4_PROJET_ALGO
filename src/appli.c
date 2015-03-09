@@ -111,15 +111,15 @@ void user_add(struct directory* dir, struct index *ifn, struct index *itel)
   //  directory_data_create(data);
 
   
-  printf("Entry first name: ");
+  printf("Entry first name (length: %d min, %d max): ",NAME_LENGTH_MIN,NAME_LENGTH_MAX);
   char * fn = get_entry();
   printf("\n");
   
-  printf("Entry last name: ");
+  printf("Entry last name (length: %d min, %d max): ",NAME_LENGTH_MIN,NAME_LENGTH_MAX);
   char * ln = get_entry();
   printf("\n");
   
-  printf("Entry telephone: ");
+  printf("Entry telephone (length: %d): ", TELEPHONE_LENGTH);
   char * tel = get_entry();
   printf("\n");
 
