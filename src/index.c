@@ -182,8 +182,8 @@ size_t fnv_hash_32bits(const char *key)
 {
   assert(key);
   
-  const size_t FNV_OFFSET_BASIS = 0xcbf29ce484222325;
-  const size_t FNV_PRIME = 0x100000001b3;
+  const size_t FNV_OFFSET_BASIS = 2166136261; 
+  const size_t FNV_PRIME = 16777619;
   
   const size_t BYTES = strlen(key);
   
@@ -203,8 +203,8 @@ size_t fnv_hash_64bits(const char *key)
 {
   assert(key);
   
-  const size_t FNV_OFFSET_BASIS = 16777619;
-  const size_t FNV_PRIME = 2166136261;
+  const size_t FNV_OFFSET_BASIS = 0xcbf29ce484222325;
+  const size_t FNV_PRIME =  1099511628211; 
   
   const size_t BYTES = strlen(key);
   
@@ -292,11 +292,6 @@ void index_rehash(struct index *self)
      //create tmp->buckets
      tmp->buckets = calloc(size, sizeof(struct index_bucket *));
      tmp->size = size;
-     
-     for( size_t i = 0; i < size; i++ )
-     	{
-     	  tmp->buckets[i] = NULL;
-	}
      
      //rehash self->buckets into tmp 
      for(size_t i = 0; i<self->size; i++)
